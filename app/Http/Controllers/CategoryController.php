@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\News;
+use App\Models\RolesPermission;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -19,57 +21,66 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = Category::latest()->get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('image', function ($row) {
-                    if ($row->image == 'post.jpg') {
-                        $imagename = Storage::disk('uploads')->url('noimage.jpg');
-                    } else {
-                        $imagename = Storage::disk('uploads')->url($row->image);
-                    }
-                    $image = "<img src='$imagename' style='max-height: 100px;'>";
-                    return $image;
-                })
-                ->addColumn('status', function ($row) {
-                    $status = $row->status;
-                    if ($status == 1) {
-                        $status = "Approved";
-                    } else {
-                        $status = "Not Approved";
-                    }
-                    return $status;
-                })
-                ->addColumn('featured', function ($row) {
-                    $featured = $row->featured;
-                    if ($featured == 1) {
-                        $featured = "Featured";
-                    } else {
-                        $featured = "Not Featured";
-                    }
-                    return $featured;
-                })
-                ->addColumn('action', function ($row) {
+        $roles_permission = RolesPermission::where('role_id', Auth::user()->role_id)->get();
+        $rolespermission = [];
+        foreach ($roles_permission as $rolepermission) {
+            array_push($rolespermission, $rolepermission->permission_id);
+        }
+        if (in_array(4, $rolespermission)) {
+            if ($request->ajax()) {
+                $data = Category::latest()->get();
+                return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('image', function ($row) {
+                        if ($row->image == 'post.jpg') {
+                            $imagename = Storage::disk('uploads')->url('noimage.jpg');
+                        } else {
+                            $imagename = Storage::disk('uploads')->url($row->image);
+                        }
+                        $image = "<img src='$imagename' style='max-height: 100px;'>";
+                        return $image;
+                    })
+                    ->addColumn('status', function ($row) {
+                        $status = $row->status;
+                        if ($status == 1) {
+                            $status = "Approved";
+                        } else {
+                            $status = "Not Approved";
+                        }
+                        return $status;
+                    })
+                    ->addColumn('featured', function ($row) {
+                        $featured = $row->featured;
+                        if ($featured == 1) {
+                            $featured = "Featured";
+                        } else {
+                            $featured = "Not Featured";
+                        }
+                        return $featured;
+                    })
+                    ->addColumn('action', function ($row) {
 
-                    $editurl = route('admin.category.edit', $row->id);
-                    $deleteurl = route('admin.category.destroy', $row->id);
+                        $editurl = route('category.edit', $row->id);
+                        $deleteurl = route('category.destroy', $row->id);
 
-                    $csrf_token = csrf_token();
+                        $csrf_token = csrf_token();
 
-                    $btn = "<a href='$editurl' class='edit btn btn-primary btn-sm'>Edit</a>
+                        $btn = "<a href='$editurl' class='edit btn btn-primary btn-sm'>Edit</a>
                                 <form action='$deleteurl' method='POST' style='display:inline-block;'>
                                     <input type='hidden' name='_token' value='$csrf_token'>
                                     <input type='hidden' name='_method' value='DELETE' />
                                         <button type='submit' class='btn btn-danger btn-sm'>Delete</button>
                                 </form>";
-                    return $btn;
-                })
-                ->rawColumns(['image', 'status', 'featured', 'action'])
-                ->make(true);
+                        return $btn;
+                    })
+                    ->rawColumns(['image', 'status', 'featured', 'action'])
+                    ->make(true);
+            }
+            $setting = Setting::first();
+            return view('backend.categories.index', compact('setting'));
+        } else {
+            return view('backend.permissions.permission');
         }
-        $setting = Setting::first();
-        return view('backend.categories.index', compact('setting'));
     }
 
 
@@ -80,8 +91,17 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $setting = Setting::first();
-        return view('backend.categories.create', compact('setting'));
+        $roles_permission = RolesPermission::where('role_id', Auth::user()->role_id)->get();
+        $rolespermission = [];
+        foreach ($roles_permission as $rolepermission) {
+            array_push($rolespermission, $rolepermission->permission_id);
+        }
+        if (in_array(4, $rolespermission)) {
+            $setting = Setting::first();
+            return view('backend.categories.create', compact('setting'));
+        } else {
+            return view('backend.permissions.permission');
+        }
     }
 
     /**
@@ -121,7 +141,7 @@ class CategoryController extends Controller
 
         $category->save();
 
-        return redirect()->route('admin.category.index')->with('success', 'Category information saved successfully.');
+        return redirect()->route('category.index')->with('success', 'Category information saved successfully.');
     }
 
     /**
@@ -143,9 +163,18 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::findorFail($id);
-        $setting = Setting::first();
-        return view('backend.categories.edit', compact('category', 'setting'));
+        $roles_permission = RolesPermission::where('role_id', Auth::user()->role_id)->get();
+        $rolespermission = [];
+        foreach ($roles_permission as $rolepermission) {
+            array_push($rolespermission, $rolepermission->permission_id);
+        }
+        if (in_array(4, $rolespermission)) {
+            $category = Category::findorFail($id);
+            $setting = Setting::first();
+            return view('backend.categories.edit', compact('category', 'setting'));
+        } else {
+            return view('backend.permissions.permission');
+        }
     }
 
     /**
@@ -189,7 +218,7 @@ class CategoryController extends Controller
             'featured' => $featured,
         ]);
 
-        return redirect()->route('admin.category.index')->with('success', 'Category information updated successfully.');
+        return redirect()->route('category.index')->with('success', 'Category information updated successfully.');
     }
 
 
@@ -201,19 +230,26 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::findorFail($id);
-
-        $news = News::get();
-        foreach ($news as $newsitem) {
-            if(in_array($category->id, $newsitem->category_id)) {
-                return redirect()->route('admin.category.index')->with('failure', 'Category is used in News. Cannot delete.');
-            }
-            else{
-                Storage::disk('uploads')->delete($category->image);
-                $category->delete();
-                return redirect()->route('admin.category.index')->with('success', 'Category deleted successfully.');
-            }
+        $roles_permission = RolesPermission::where('role_id', Auth::user()->role_id)->get();
+        $rolespermission = [];
+        foreach ($roles_permission as $rolepermission) {
+            array_push($rolespermission, $rolepermission->permission_id);
         }
+        if (in_array(4, $rolespermission)) {
+            $category = Category::findorFail($id);
 
+            $news = News::get();
+            foreach ($news as $newsitem) {
+                if (in_array($category->id, $newsitem->category_id)) {
+                    return redirect()->route('category.index')->with('failure', 'Category is used in News. Cannot delete.');
+                } else {
+                    Storage::disk('uploads')->delete($category->image);
+                    $category->delete();
+                    return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
+                }
+            }
+        } else {
+            return view('backend.permissions.permission');
+        }
     }
 }

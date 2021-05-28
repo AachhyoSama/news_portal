@@ -7,6 +7,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="container-fluid">
+        <a href="{{route('permission.create')}}" class="btn btn-success mt-3">Add New Permission</a>
         <div class="row mt-3">
             <div class="col-md-12">
                 @if(session()->has('success'))
@@ -15,18 +16,17 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="text-center">
-                            Our Subscribers
+                            Permissions
                         </h2>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive text-center">
-                            <table class="table table-striped data-table">
+                        <div class="table-responsive">
+                            <table class="table table-striped data-table text-center">
                                 <thead>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Email</th>
-                                        <th>Subscribed Date</th>
-                                        <th>Status</th>
+                                        <th>Permission</th>
+                                        <th>Slug</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -53,16 +53,12 @@
       var table = $('.data-table').DataTable({
           processing: true,
           serverSide: true,
-          ajax: "{{ route('subscriber.index') }}",
+          ajax: "{{ route('permission.index') }}",
           columns: [
               {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-              {data: 'email', name: 'email'},
-              {data: 'date', name: 'date'},
-              {data: 'status', name: 'status'},
-              {data: 'action', name: 'action',
-                orderable: false,
-                searchable: false
-            },
+              {data: 'permission', name: 'permission'},
+              {data: 'slug', name: 'slug'},
+              {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
       });
 

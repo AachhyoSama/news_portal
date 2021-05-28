@@ -21,7 +21,7 @@
                     </div>
 
                     <div class="card-body">
-                        <form action="{{route('admin.settings.update', $setting->id)}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('settings.update', $setting->id)}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 

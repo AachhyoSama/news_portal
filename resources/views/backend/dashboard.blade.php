@@ -114,7 +114,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="row">
-                            <div class="col-md-12 text-right"><a href="{{route('admin.news.index')}}" class="btn btn-primary">View All News</a></div>
+                            <div class="col-md-12 text-right"><a href="{{route('news.index')}}" class="btn btn-primary">View All News</a></div>
                         </div>
                     </div>
                 </div>
@@ -163,7 +163,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="row">
-                            <div class="col-md-12 text-right"><a href="{{route('admin.subscriber.index')}}" class="btn btn-primary">View All Subscribers</a></div>
+                            <div class="col-md-12 text-right"><a href="{{route('subscriber.index')}}" class="btn btn-primary">View All Subscribers</a></div>
                         </div>
                     </div>
                 </div>

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\RolesPermission;
 use App\Models\User;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -18,43 +20,52 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = User::latest()->get();
-
-            return Datatables::of($data)
-                ->addIndexColumn()
-
-                ->addColumn('role', function ($row) {
-                    $role = $row->role_id;
-                    if ($role == 1) {
-                        $role = "Admin";
-                    } else {
-                        $role = "Editor";
-                    }
-                    return $role;
-                })
-                ->addColumn('action', function ($row) {
-
-                    $editurl = route('admin.user.edit', $row->id);
-                    $deleteurl = route('admin.user.destroy', $row->id);
-
-                    $csrf_token = csrf_token();
-
-                    $btn = "<a href='$editurl' class='edit btn btn-primary btn-sm'>Edit</a>
-                                <form action='$deleteurl' method='POST' style='display:inline-block;'>
-                                    <input type='hidden' name='_token' value='$csrf_token'>
-                                    <input type='hidden' name='_method' value='DELETE' />
-                                        <button type='submit' class='btn btn-danger btn-sm'>Delete</button>
-                                </form>";
-
-                    return $btn;
-                })
-                ->rawColumns(['role', 'action'])
-                ->make(true);
+        $roles_permission = RolesPermission::where('role_id', Auth::user()->role_id)->get();
+        $rolespermission = [];
+        foreach ($roles_permission as $rolepermission) {
+            array_push($rolespermission, $rolepermission->permission_id);
         }
+        if (in_array(1, $rolespermission)) {
+            if ($request->ajax()) {
+                $data = User::latest()->get();
 
-        $setting = Setting::first();
-        return view('backend.users.index', compact('setting'));
+                return Datatables::of($data)
+                    ->addIndexColumn()
+
+                    ->addColumn('role', function ($row) {
+                        $role = $row->role_id;
+                        if ($role == 1) {
+                            $role = "Admin";
+                        } else {
+                            $role = "Editor";
+                        }
+                        return $role;
+                    })
+                    ->addColumn('action', function ($row) {
+
+                        $editurl = route('user.edit', $row->id);
+                        $deleteurl = route('user.destroy', $row->id);
+
+                        $csrf_token = csrf_token();
+
+                        $btn = "<a href='$editurl' class='edit btn btn-primary btn-sm'>Edit</a>
+                                    <form action='$deleteurl' method='POST' style='display:inline-block;'>
+                                        <input type='hidden' name='_token' value='$csrf_token'>
+                                        <input type='hidden' name='_method' value='DELETE' />
+                                            <button type='submit' class='btn btn-danger btn-sm'>Delete</button>
+                                    </form>";
+
+                        return $btn;
+                    })
+                    ->rawColumns(['role', 'action'])
+                    ->make(true);
+            }
+
+            $setting = Setting::first();
+            return view('backend.users.index', compact('setting'));
+        } else {
+            return view('backend.permissions.permission');
+        }
     }
 
     /**
@@ -64,9 +75,18 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all();
-        $setting = Setting::first();
-        return view('backend.users.create', compact('roles', 'setting'));
+        $roles_permission = RolesPermission::where('role_id', Auth::user()->role_id)->get();
+        $rolespermission = [];
+        foreach ($roles_permission as $rolepermission) {
+            array_push($rolespermission, $rolepermission->permission_id);
+        }
+        if (in_array(1, $rolespermission)) {
+            $roles = Role::all();
+            $setting = Setting::first();
+            return view('backend.users.create', compact('roles', 'setting'));
+        } else {
+            return view('backend.permissions.permission');
+        }
     }
 
     /**
@@ -93,7 +113,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('admin.user.index')->with('success', 'New User added successfully.');
+        return redirect()->route('user.index')->with('success', 'New User added successfully.');
     }
 
     /**
@@ -115,10 +135,19 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findorFail($id);
-        $roles = Role::all();
-        $setting = Setting::first();
-        return view('backend.users.edit', compact('user', 'roles', 'setting'));
+        $roles_permission = RolesPermission::where('role_id', Auth::user()->role_id)->get();
+        $rolespermission = [];
+        foreach ($roles_permission as $rolepermission) {
+            array_push($rolespermission, $rolepermission->permission_id);
+        }
+        if (in_array(1, $rolespermission)) {
+            $user = User::findorFail($id);
+            $roles = Role::all();
+            $setting = Setting::first();
+            return view('backend.users.edit', compact('user', 'roles', 'setting'));
+        } else {
+            return view('backend.permissions.permission');
+        }
     }
 
     /**
@@ -143,7 +172,7 @@ class UserController extends Controller
                 'role_id' => $data['role'],
             ]);
 
-            return redirect()->route('admin.user.index')->with('success', 'User information updated successfully.');
+            return redirect()->route('user.index')->with('success', 'User information updated successfully.');
         } else if (isset($_POST['submitpassword'])) {
             $data = $this->validate($request, [
                 'oldpassword' => 'required',
@@ -158,7 +187,7 @@ class UserController extends Controller
                         'password' => $new_password,
                     ]);
 
-                    return redirect()->route('admin.user.index')->with('success', 'User password updated successfully.');
+                    return redirect()->route('user.index')->with('success', 'User password updated successfully.');
                 } else {
                     session()->flash('success', 'Password cannot be old password.');
                 }
@@ -174,8 +203,17 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findorFail($id);
-        $user->delete();
-        return redirect()->back()->with('success', 'User information deleted successfully.');
+        $roles_permission = RolesPermission::where('role_id', Auth::user()->role_id)->get();
+        $rolespermission = [];
+        foreach ($roles_permission as $rolepermission) {
+            array_push($rolespermission, $rolepermission->permission_id);
+        }
+        if (in_array(1, $rolespermission)) {
+            $user = User::findorFail($id);
+            $user->delete();
+            return redirect()->back()->with('success', 'User information deleted successfully.');
+        } else {
+            return view('backend.permissions.permission');
+        }
     }
 }

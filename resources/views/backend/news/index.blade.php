@@ -7,7 +7,7 @@
 
 <div class="content-wrapper">
     <div class="container-fluid">
-        <a href="{{route('admin.news.create')}}" class="btn btn-success mt-3">Add News</a>
+        <a href="{{route('news.create')}}" class="btn btn-success mt-3">Add News</a>
         <div class="row mt-3">
             <div class="col-md-12">
                 @if(session()->has('success'))
@@ -60,7 +60,7 @@
       var table = $('.data-table').DataTable({
           processing: true,
           serverSide: true,
-          ajax: "{{ route('admin.news.index') }}",
+          ajax: "{{ route('news.index') }}",
           columns: [
               {data: 'DT_RowIndex', name: 'DT_RowIndex'},
               {data: 'image', name: 'image'},

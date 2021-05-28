@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\News;
 use App\Models\Setting;
 use App\Models\Subscribers;
@@ -27,24 +26,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role_id == 3) {
-            return view('frontend.dashboard');
-        } else {
-            $setting = Setting::first();
-            $news = News::latest()->take(10)->get();
-            $totalnews = News::get();
-            $totalsubscribers = Subscribers::get();
-            $subscribers = Subscribers::latest()->take(10)->get();
-            $total_views = 0;
-            foreach ($totalnews as $singlenews) {
-                $total_views = $total_views + $singlenews->view_count;
-            }
-            return view('backend.dashboard', compact('setting', 'news', 'totalnews', 'subscribers', 'totalsubscribers', 'total_views'));
+        $setting = Setting::first();
+        $news = News::latest()->take(10)->get();
+        $totalnews = News::get();
+        $totalsubscribers = Subscribers::get();
+        $subscribers = Subscribers::latest()->take(10)->get();
+        $total_views = 0;
+        foreach ($totalnews as $singlenews) {
+            $total_views = $total_views + $singlenews->view_count;
         }
-    }
-
-    public function front()
-    {
-        return view('frontend.dashboard');
+        return view('backend.dashboard', compact('setting', 'news', 'totalnews', 'subscribers', 'totalsubscribers', 'total_views'));
     }
 }

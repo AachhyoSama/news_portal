@@ -7,7 +7,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="container-fluid">
-        <a href="{{route('admin.user.create')}}" class="btn btn-success mt-3">Add User</a>
+        <a href="{{route('user.create')}}" class="btn btn-success mt-3">Add User</a>
         <div class="row mt-3">
             <div class="col-md-12">
                 @if(session()->has('success'))
@@ -54,7 +54,7 @@
       var table = $('.data-table').DataTable({
           processing: true,
           serverSide: true,
-          ajax: "{{ route('admin.user.index') }}",
+          ajax: "{{ route('user.index') }}",
           columns: [
               {data: 'DT_RowIndex', name: 'DT_RowIndex'},
               {data: 'name', name: 'name'},

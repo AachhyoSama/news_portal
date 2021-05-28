@@ -7,7 +7,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="container-fluid">
-        <a href="{{route('admin.multimedia.create')}}" class="btn btn-success mt-3">Add Multimedia</a>
+        <a href="{{route('multimedia.create')}}" class="btn btn-success mt-3">Add Multimedia</a>
         <div class="row mt-3">
             <div class="col-md-12">
                 @if(session()->has('success'))
@@ -53,7 +53,7 @@
       var table = $('.data-table').DataTable({
           processing: true,
           serverSide: true,
-          ajax: "{{ route('admin.multimedia.index') }}",
+          ajax: "{{ route('multimedia.index') }}",
           columns: [
               {data: 'DT_RowIndex', name: 'DT_RowIndex'},
               {data: 'title', name: 'title'},

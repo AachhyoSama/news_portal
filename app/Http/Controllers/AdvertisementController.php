@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Advertisement;
+use App\Models\RolesPermission;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class AdvertisementController extends Controller
@@ -16,9 +18,18 @@ class AdvertisementController extends Controller
      */
     public function index()
     {
-        $advertisement = Advertisement::first();
-        $setting = Setting::first();
-        return view('backend.advertisements.index', compact('advertisement', 'setting'));
+        $roles_permission = RolesPermission::where('role_id', Auth::user()->role_id)->get();
+        $rolespermission = [];
+        foreach ($roles_permission as $rolepermission) {
+            array_push($rolespermission, $rolepermission->permission_id);
+        }
+        if (in_array(7, $rolespermission)) {
+            $advertisement = Advertisement::first();
+            $setting = Setting::first();
+            return view('backend.advertisements.index', compact('advertisement', 'setting'));
+        } else {
+            return view('backend.permissions.permission');
+        }
     }
 
     /**
@@ -153,7 +164,7 @@ class AdvertisementController extends Controller
             'singlepage_bottom_url' => $data['singlepage_bottom_url'],
         ]);
 
-        return redirect()->route('admin.advertisements.index')->with('success', 'Advertisement Information updated successfully.');
+        return redirect()->route('advertisements.index')->with('success', 'Advertisement Information updated successfully.');
     }
 
     /**

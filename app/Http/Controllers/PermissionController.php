@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Multimedia;
+use App\Models\Permission;
 use App\Models\RolesPermission;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
-class MultimediaController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,25 +24,24 @@ class MultimediaController extends Controller
         foreach ($roles_permission as $rolepermission) {
             array_push($rolespermission, $rolepermission->permission_id);
         }
-        if (in_array(6, $rolespermission)) {
+        if (in_array(2, $rolespermission)) {
             if ($request->ajax()) {
-
-                $data = Multimedia::latest()->get();
-                return Datatables::of($data)
+                $data = Permission::latest()->get();
+                return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
 
-                        $editurl = route('multimedia.edit', $row->id);
-                        $deleteurl = route('multimedia.destroy', $row->id);
+                        $editurl = route('permission.edit', $row->id);
+                        $deleteurl = route('permission.destroy', $row->id);
 
                         $csrf_token = csrf_token();
 
                         $btn = "<a href='$editurl' class='edit btn btn-primary btn-sm'>Edit</a>
-                                <form action='$deleteurl' method='POST' style='display:inline-block;'>
-                                    <input type='hidden' name='_token' value='$csrf_token'>
-                                    <input type='hidden' name='_method' value='DELETE' />
-                                        <button type='submit' class='btn btn-danger btn-sm'>Delete</button>
-                                </form>";
+                            <form action='$deleteurl' method='POST' style='display:inline-block;'>
+                                <input type='hidden' name='_token' value='$csrf_token'>
+                                <input type='hidden' name='_method' value='DELETE' />
+                                    <button type='submit' class='btn btn-danger btn-sm'>Delete</button>
+                            </form>";
 
                         return $btn;
                     })
@@ -49,7 +49,7 @@ class MultimediaController extends Controller
                     ->make(true);
             }
             $setting = Setting::first();
-            return view('backend.multimedia.index', compact('setting'));
+            return view('backend.permissions.index', compact('setting'));
         } else {
             return view('backend.permissions.permission');
         }
@@ -67,9 +67,9 @@ class MultimediaController extends Controller
         foreach ($roles_permission as $rolepermission) {
             array_push($rolespermission, $rolepermission->permission_id);
         }
-        if (in_array(6, $rolespermission)) {
+        if (in_array(2, $rolespermission)) {
             $setting = Setting::first();
-            return view('backend.multimedia.create', compact('setting'));
+            return view('backend.permissions.create', compact('setting'));
         } else {
             return view('backend.permissions.permission');
         }
@@ -84,26 +84,25 @@ class MultimediaController extends Controller
     public function store(Request $request)
     {
         $data = $this->validate($request, [
-            'title' => 'required',
-            'link' => 'required',
+            'permission' => 'required'
         ]);
 
-        $multimedia = Multimedia::create([
-            'title' => $data['title'],
-            'link' => $data['link'],
+        $new_permission = Permission::create([
+            'permission' => $data['permission'],
+            'slug' => Str::slug($data['permission'])
         ]);
 
-        $multimedia->save();
-        return redirect()->route('multimedia.index')->with('success', 'Multimedia has been added successfully.');
+        $new_permission->save();
+        return redirect()->route('permission.index')->with('success', 'Permission is saved successfully.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Multimedia  $multimedia
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Multimedia $multimedia)
+    public function show($id)
     {
         //
     }
@@ -111,7 +110,7 @@ class MultimediaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Multimedia  $multimedia
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -121,10 +120,10 @@ class MultimediaController extends Controller
         foreach ($roles_permission as $rolepermission) {
             array_push($rolespermission, $rolepermission->permission_id);
         }
-        if (in_array(6, $rolespermission)) {
-            $multimedia = Multimedia::findorFail($id);
+        if (in_array(2, $rolespermission)) {
+            $permission = Permission::findorFail($id);
             $setting = Setting::first();
-            return view('backend.multimedia.edit', compact('multimedia', 'setting'));
+            return view('backend.permissions.edit', compact('permission', 'setting'));
         } else {
             return view('backend.permissions.permission');
         }
@@ -134,28 +133,26 @@ class MultimediaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Multimedia  $multimedia
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Multimedia $multimedia)
+    public function update(Request $request, $id)
     {
-        $data = $this->validate($request, [
-            'title' => 'required',
-            'link' => 'required',
+        $existing_permission = Permission::findorFail($id);
+        $data = $this->validate($request, ['permission' => 'required']);
+
+        $existing_permission->update([
+            'permission' => $data['permission'],
+            'slug' => Str::slug($data['permission'])
         ]);
 
-        $multimedia->update([
-            'title' => $data['title'],
-            'link' => $data['link'],
-        ]);
-
-        return redirect()->route('multimedia.index')->with('success', 'Multimedia information updated successfully.');
+        return redirect()->route('permission.index')->with('success', 'Permission information updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Multimedia  $multimedia
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -165,10 +162,10 @@ class MultimediaController extends Controller
         foreach ($roles_permission as $rolepermission) {
             array_push($rolespermission, $rolepermission->permission_id);
         }
-        if (in_array(6, $rolespermission)) {
-            $multimedia = Multimedia::findorFail($id);
-            $multimedia->delete();
-            return redirect()->back()->with('success', 'Multimedia information deleted successfully.');
+        if (in_array(2, $rolespermission)) {
+            $permission = Permission::findorFail($id);
+            $permission->delete();
+            return redirect()->route('permission.index')->with('success', 'Permission information deleted successfully.');
         } else {
             return view('backend.permissions.permission');
         }

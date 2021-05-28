@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RolesPermission;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
@@ -15,8 +17,17 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $setting = Setting::first();
-        return view('backend.settings.index', compact('setting'));
+        $roles_permission = RolesPermission::where('role_id', Auth::user()->role_id)->get();
+        $rolespermission = [];
+        foreach ($roles_permission as $rolepermission) {
+            array_push($rolespermission, $rolepermission->permission_id);
+        }
+        if (in_array(8, $rolespermission)) {
+            $setting = Setting::first();
+            return view('backend.settings.index', compact('setting'));
+        } else {
+            return view('backend.permissions.permission');
+        }
     }
 
     /**
@@ -115,7 +126,7 @@ class SettingController extends Controller
             'email' => $data['email'],
         ]);
 
-        return redirect()->route('admin.settings.index')->with('success', 'Settings information updated successfully.');
+        return redirect()->route('settings.index')->with('success', 'Settings information updated successfully.');
     }
 
     /**

@@ -10,7 +10,7 @@
 
 <div class="content-wrapper">
     <div class="container-fluid">
-        <a href="{{route('admin.news.index')}}" class="btn btn-danger mt-3">Back</a>
+        <a href="{{route('news.index')}}" class="btn btn-danger mt-3">Back</a>
         <div class="row mt-3">
             <div class="col-md-12">
                 <div class="card">
@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="card-body">
-                        <form action="{{route('admin.news.update', $news->id)}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('news.update', $news->id)}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <div class="row">
@@ -167,7 +167,7 @@ $(function () {
         console.log("outform is ",out);
         $.ajax({
             method: 'POST',
-            url: '{{ route('admin.news.store')}}',
+            url: '{{ route('news.store')}}',
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             contentType: false,
             cache: false,

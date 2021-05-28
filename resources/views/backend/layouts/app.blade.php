@@ -110,9 +110,9 @@
     </ul>
 
     <!-- Right navbar links -->
-    {{-- <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
-      <li class="nav-item">
+    {{--  <li class="nav-item">
         <div class="navbar-search-block">
           <form class="form-inline">
             <div class="input-group input-group-sm">
@@ -128,14 +128,14 @@
             </div>
           </form>
         </div>
-      </li>
+      </li> --}}
 
       <li class="nav-item d-none d-sm-inline-block">
-      <a href="{{url('/dashboard')}}" class="nav-link">{{$setting->sitename}}</a>
+        <a href="{{url('/dashboard')}}" class="nav-link"><i class="fas fa-user"></i> {{Auth::user()->name}}</a>
       </li>
 
 
-    </ul> --}}
+    </ul>
   </nav>
   <!-- /.navbar -->
 
@@ -184,7 +184,7 @@
               </li>
 
               <li class="nav-item">
-                <a href="{{route('admin.user.index')}}" class="nav-link">
+                <a href="{{route('user.index')}}" class="nav-link">
                   <i class="nav-icon fas fa-users"></i>
                   <p>
                     User
@@ -193,7 +193,7 @@
               </li>
 
           <li class="nav-item">
-            <a href="{{route('admin.category.index')}}" class="nav-link">
+            <a href="{{route('category.index')}}" class="nav-link">
               <i class="nav-icon fas fa-list"></i>
               <p>
                 Categories
@@ -202,7 +202,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="{{route('admin.news.index')}}" class="nav-link">
+            <a href="{{route('news.index')}}" class="nav-link">
               <i class="nav-icon fa fa-newspaper"></i>
               <p>
                 News
@@ -210,7 +210,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{route('admin.multimedia.index')}}" class="nav-link">
+            <a href="{{route('multimedia.index')}}" class="nav-link">
               <i class="nav-icon fas fa-play"></i>
               <p>
                 Multimedia
@@ -222,7 +222,7 @@
           <li class="nav-header">OTHER SECTIONS</li>
 
           <li class="nav-item">
-            <a href="{{route('admin.settings.index')}}" class="nav-link">
+            <a href="{{route('settings.index')}}" class="nav-link">
               <i class="nav-icon fas fa-cogs"></i>
               <p>
                 Settings
@@ -230,7 +230,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{route('admin.advertisements.index')}}" class="nav-link">
+            <a href="{{route('advertisements.index')}}" class="nav-link">
               <i class="nav-icon fas fa-ad"></i>
               <p>
                 Advertisements
@@ -239,10 +239,28 @@
           </li>
 
            <li class="nav-item">
-            <a href="{{route('admin.subscriber.index')}}" class="nav-link">
+            <a href="{{route('subscriber.index')}}" class="nav-link">
               <i class="nav-icon far fa-user"></i>
               <p>
                 Our Subscribers
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{route('permission.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-hand-paper"></i>
+              <p>
+                Permissions
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{route('roles.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-user-tag"></i>
+              <p>
+                Roles
               </p>
             </a>
           </li>

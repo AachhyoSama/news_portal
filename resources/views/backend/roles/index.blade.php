@@ -7,6 +7,7 @@
 @section('content')
 <div class="content-wrapper">
     <div class="container-fluid">
+        <a href="{{route('roles.create')}}" class="btn btn-success mt-3">Add New Role</a>
         <div class="row mt-3">
             <div class="col-md-12">
                 @if(session()->has('success'))
@@ -15,18 +16,18 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="text-center">
-                            Our Subscribers
+                            Roles
                         </h2>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive text-center">
-                            <table class="table table-striped data-table">
+                        <div class="table-responsive">
+                            <table class="table table-striped data-table text-center">
                                 <thead>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Email</th>
-                                        <th>Subscribed Date</th>
-                                        <th>Status</th>
+                                        <th>Name</th>
+                                        <th>Slug</th>
+                                        <th>Permissions</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -53,16 +54,13 @@
       var table = $('.data-table').DataTable({
           processing: true,
           serverSide: true,
-          ajax: "{{ route('subscriber.index') }}",
+          ajax: "{{ route('roles.index') }}",
           columns: [
               {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-              {data: 'email', name: 'email'},
-              {data: 'date', name: 'date'},
-              {data: 'status', name: 'status'},
-              {data: 'action', name: 'action',
-                orderable: false,
-                searchable: false
-            },
+              {data: 'name', name: 'name'},
+              {data: 'slug', name: 'slug'},
+              {data: 'permissions', name: 'permissions'},
+              {data: 'action', name: 'action', orderable: false, searchable: false},
           ]
       });
 

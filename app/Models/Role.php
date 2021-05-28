@@ -16,8 +16,19 @@ class Role extends Model
         'slug',
     ];
 
+    public function permissions()
+    {
+
+        return $this->belongsToMany(Permission::class, 'roles_permissions');
+    }
+
     public function users()
     {
-        return $this->hasMany(User::class, 'role_id', 'id');
+        return $this->belongsToMany(User::class, 'role_id', 'id');
+    }
+
+    public function roles_permissions()
+    {
+        return $this->hasMany(RolesPermission::class, 'role_id');
     }
 }

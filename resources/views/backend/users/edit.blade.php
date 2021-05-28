@@ -4,7 +4,7 @@
 
 <div class="content-wrapper">
     <div class="container-fluid">
-        <a href="{{route('admin.user.index')}}" class="btn btn-danger mt-3">Back</a>
+        <a href="{{route('user.index')}}" class="btn btn-danger mt-3">Back</a>
         <div class="row mt-3">
             <div class="col-md-12">
 
@@ -23,7 +23,7 @@
                                 <div class="tab-pane active" id="details">
                                     <h2>Edit User details</h2>
                                     <hr>
-                                    <form action="{{route('admin.user.update', $user->id)}}" method="POST">
+                                    <form action="{{route('user.update', $user->id)}}" method="POST">
                                         @csrf
                                         @method('put')
                                         <div class="form-group">
@@ -63,7 +63,7 @@
                                         <div class="col-md-12">
                                             <h2>Edit User Password</h2>
                                             <hr>
-                                            <form action="{{route('admin.user.update', $user->id)}}" method="POST">
+                                            <form action="{{route('user.update', $user->id)}}" method="POST">
                                                 @csrf
                                                 @method("PUT")
                                                 <div class="row">

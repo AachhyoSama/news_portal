@@ -4,7 +4,7 @@
 
 <div class="content-wrapper">
     <div class="container-fluid">
-        <a href="{{route('admin.multimedia.index')}}" class="btn btn-danger mt-3">Back</a>
+        <a href="{{route('multimedia.index')}}" class="btn btn-danger mt-3">Back</a>
         <div class="row mt-3">
             <div class="col-md-12">
                 <div class="card">
@@ -13,7 +13,7 @@
                     </div>
 
                     <div class="card-body">
-                        <form action="{{route('admin.multimedia.store')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('multimedia.store')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="Title">Title</label>
