@@ -1,6 +1,7 @@
 @extends('frontend.layouts.app')
 @section('content')
 <main>
+
     <!-- Trending Area Start -->
     <div class="trending-area fix">
         <div class="container">
@@ -304,8 +305,12 @@
                                 </blockquote>
                         </div>
                 </div>
-                <div class="news-poster d-none d-lg-block mt-5">
-                    <a href="{{$advertisement->homepage_sidebar_url}}" target="_blank"><img src="{{Storage::disk('uploads')->url($advertisement->homepage_sidebar_image)}}" alt=""></a>
+                <div class="news-poster d-lg-block mt-5 owl-ad owl-carousel owl-theme">
+                    @foreach ($sidebar_advertisement as $advertisement)
+                        <div class="item">
+                            <a href="{{$advertisement->link}}" target="_blank"><img src="{{Storage::disk('uploads')->url($advertisement->imagename)}}" alt="" style="max-height: 670px;"></a>
+                        </div>
+                    @endforeach
                 </div>
             </div>
             </div>
@@ -356,10 +361,14 @@
     </div>
 
     <div class="recent-articles mt-5">
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
-                <div class="col-lg-12 text-center">
-                    <a href="{{$advertisement->homepage_bottom_url}}" target="_blank"><img src="{{Storage::disk('uploads')->url($advertisement->homepage_bottom_image)}}" alt="{{$advertisement->homepage_bottom_url}}" class="img-fluid" style="max-width: 80%; height:auto;"></a>
+                <div class="col-lg-12 text-center owl-ad owl-carousel owl-theme">
+                    @foreach ($bottom_advertisement as $advertisement)
+                        <div class="item">
+                            <a href="{{$advertisement->link}}" target="_blank"><img src="{{Storage::disk('uploads')->url($advertisement->imagename)}}" alt="" class="img-fluid" style="max-height: 550px;"></a>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>

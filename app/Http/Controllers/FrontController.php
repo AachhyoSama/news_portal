@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Mail\RegisterSubscriber;
 use App\Mail\SubscriberMail;
 use App\Models\Advertisement;
+use App\Models\BottomAdvertisements;
 use App\Models\Category;
+use App\Models\HeaderAdvertisements;
 use App\Models\News;
 use App\Models\Seo;
 use App\Models\Setting;
+use App\Models\SidebarAdvertisements;
 use App\Models\Subscribers;
 use App\Models\Tags;
 use Artesaos\SEOTools\Facades\SEOMeta;
@@ -24,6 +27,9 @@ class FrontController extends Controller
     public function index()
     {
         $setting = Setting::first();
+        $header_advertisement = HeaderAdvertisements::latest()->where('status', 1)->get();
+        $sidebar_advertisement = SidebarAdvertisements::latest()->where('status', 1)->get();
+        $bottom_advertisement = BottomAdvertisements::latest()->where('status', 1)->get();
         $leftcategory = [];
         $categories = Category::all()->toArray();
         $menucategories = Category::take(7)->get()->toArray();
@@ -42,12 +48,15 @@ class FrontController extends Controller
         $trendingthree = News::where('is_trending', 1)->take(3)->get();
         $trendingfive = News::latest()->where('is_trending', 1)->take(5)->get();
         $recentnews = News::latest()->take(5)->get();
-        return view('frontend.index', compact('setting', 'leftcategory', 'trendingone', 'trendingthree', 'trendingfive', 'downmenucategories', 'menucategories', 'popularnews', 'advertisement', 'allthenews', 'recentnews', 'categoryallnews'));
+        return view('frontend.index', compact('setting', 'header_advertisement', 'sidebar_advertisement', 'bottom_advertisement', 'leftcategory', 'trendingone', 'trendingthree', 'trendingfive', 'downmenucategories', 'menucategories', 'popularnews', 'advertisement', 'allthenews', 'recentnews', 'categoryallnews'));
     }
 
     public function aboutus()
     {
         $setting = Setting::first();
+        $header_advertisement = HeaderAdvertisements::latest()->where('status', 1)->get();
+        $sidebar_advertisement = SidebarAdvertisements::latest()->where('status', 1)->get();
+        $bottom_advertisement = BottomAdvertisements::latest()->where('status', 1)->get();
         $advertisement = Advertisement::first();
         $leftcategory = [];
         $categories = Category::all()->toArray();
@@ -62,12 +71,15 @@ class FrontController extends Controller
         $allnews = News::latest()->get();
         $popularnews = News::orderby('view_count', 'DESC')->take(4)->get();
         $latestnews = News::latest()->take(4)->get();
-        return view('frontend.aboutus', compact('setting', 'leftcategory', 'menucategories', 'advertisement', 'requiredcategories', 'allnews', 'popularnews', 'latestnews'));
+        return view('frontend.aboutus', compact('setting', 'header_advertisement', 'sidebar_advertisement', 'bottom_advertisement', 'leftcategory', 'menucategories', 'advertisement', 'requiredcategories', 'allnews', 'popularnews', 'latestnews'));
     }
 
     public function pageCategory($slug)
     {
         $setting = Setting::first();
+        $header_advertisement = HeaderAdvertisements::latest()->where('status', 1)->get();
+        $sidebar_advertisement = SidebarAdvertisements::latest()->where('status', 1)->get();
+        $bottom_advertisement = BottomAdvertisements::latest()->where('status', 1)->get();
         $advertisement = Advertisement::first();
         $leftcategory = [];
         $categories = Category::all()->toArray();
@@ -92,12 +104,15 @@ class FrontController extends Controller
                 array_push($news, $newsitem);
             }
         }
-        return view('frontend.category', compact('setting', 'allnews', 'onenews', 'requiredcategories', 'latestnews', 'advertisement', 'popularnews', 'leftcategory', 'menucategories', 'category', 'news'));
+        return view('frontend.category', compact('setting', 'header_advertisement', 'sidebar_advertisement', 'bottom_advertisement', 'allnews', 'onenews', 'requiredcategories', 'latestnews', 'advertisement', 'popularnews', 'leftcategory', 'menucategories', 'category', 'news'));
     }
 
     public function pageNews($categoryslug, $slug)
     {
         $setting = Setting::first();
+        $header_advertisement = HeaderAdvertisements::latest()->where('status', 1)->get();
+        $sidebar_advertisement = SidebarAdvertisements::latest()->where('status', 1)->get();
+        $bottom_advertisement = BottomAdvertisements::latest()->where('status', 1)->get();
         $advertisement = Advertisement::first();
         $leftcategory = [];
         $categories = Category::all()->toArray();
@@ -150,7 +165,7 @@ class FrontController extends Controller
         $news->update([
             'view_count' => $news->view_count + 1,
         ]);
-        return view('frontend.news', compact('setting', 'advertisement', 'leftcategory', 'popularnews', 'news', 'tags', 'menucategories', 'relatednewsitem', 'latestnews', 'allnews', 'requiredcategories'));
+        return view('frontend.news', compact('setting', 'header_advertisement', 'sidebar_advertisement', 'bottom_advertisement', 'advertisement', 'leftcategory', 'popularnews', 'news', 'tags', 'menucategories', 'relatednewsitem', 'latestnews', 'allnews', 'requiredcategories'));
     }
 
     public function pageAuthor($name)
@@ -167,13 +182,16 @@ class FrontController extends Controller
             }
         }
         $setting = Setting::first();
+        $header_advertisement = HeaderAdvertisements::latest()->where('status', 1)->get();
+        $sidebar_advertisement = SidebarAdvertisements::latest()->where('status', 1)->get();
+        $bottom_advertisement = BottomAdvertisements::latest()->where('status', 1)->get();
         $advertisement = Advertisement::first();
         $authornews = News::latest()->where('author', $name)->get();
         $requiredcategories = Category::take(6)->get();
         $latestnews = News::latest()->take(4)->get();
         $popularnews = News::orderby('view_count', 'DESC')->take(4)->get();
         $allnews = News::all();
-        return view('frontend.authorarticles', compact('authornews', 'name', 'leftcategory', 'menucategories', 'requiredcategories', 'latestnews', 'popularnews', 'allnews', 'setting', 'advertisement'));
+        return view('frontend.authorarticles', compact('authornews', 'name', 'leftcategory', 'menucategories', 'requiredcategories', 'latestnews', 'popularnews', 'allnews', 'setting', 'header_advertisement', 'sidebar_advertisement', 'bottom_advertisement', 'advertisement'));
     }
 
     public function pageTag($tag)
@@ -189,6 +207,9 @@ class FrontController extends Controller
             }
         }
         $setting = Setting::first();
+        $header_advertisement = HeaderAdvertisements::latest()->where('status', 1)->get();
+        $sidebar_advertisement = SidebarAdvertisements::latest()->where('status', 1)->get();
+        $bottom_advertisement = BottomAdvertisements::latest()->where('status', 1)->get();
         $advertisement = Advertisement::first();
         $requiredcategories = Category::take(6)->get();
         $latestnews = News::latest()->take(4)->get();
@@ -201,7 +222,7 @@ class FrontController extends Controller
             $tagnewsitem = News::where('id', $tagitem->news_id)->first();
             array_push($tagnews, $tagnewsitem);
         }
-        return view('frontend.tagsnews', compact('tag', 'leftcategory', 'tagnews', 'menucategories', 'requiredcategories', 'latestnews', 'popularnews', 'allnews', 'setting', 'advertisement'));
+        return view('frontend.tagsnews', compact('tag', 'leftcategory', 'tagnews', 'menucategories', 'requiredcategories', 'latestnews', 'popularnews', 'allnews', 'setting', 'header_advertisement', 'sidebar_advertisement', 'bottom_advertisement', 'advertisement'));
     }
 
     public function pageSearch(Request $request)
@@ -219,12 +240,15 @@ class FrontController extends Controller
             }
         }
         $setting = Setting::first();
+        $header_advertisement = HeaderAdvertisements::latest()->where('status', 1)->get();
+        $sidebar_advertisement = SidebarAdvertisements::latest()->where('status', 1)->get();
+        $bottom_advertisement = BottomAdvertisements::latest()->where('status', 1)->get();
         $advertisement = Advertisement::first();
         $requiredcategories = Category::take(6)->get();
         $latestnews = News::latest()->take(4)->get();
         $popularnews = News::orderby('view_count', 'DESC')->take(4)->get();
         $allnews = News::all();
-        return view('frontend.searchednews', compact('searchword', 'leftcategory', 'searchednews', 'menucategories', 'requiredcategories', 'latestnews', 'popularnews', 'allnews', 'setting', 'advertisement'));
+        return view('frontend.searchednews', compact('searchword', 'leftcategory', 'searchednews', 'menucategories', 'requiredcategories', 'latestnews', 'popularnews', 'allnews', 'setting', 'header_advertisement', 'sidebar_advertisement', 'bottom_advertisement', 'advertisement'));
     }
 
     public function registerSubscriber(Request $request)
@@ -267,6 +291,9 @@ class FrontController extends Controller
     public static function sendNews($news, $category)
     {
         $setting = Setting::first();
+        $header_advertisement = HeaderAdvertisements::latest()->where('status', 1)->get();
+        $sidebar_advertisement = SidebarAdvertisements::latest()->where('status', 1)->get();
+        $bottom_advertisement = BottomAdvertisements::latest()->where('status', 1)->get();
         $url = 'http://127.0.0.1:8000/' . $category->slug . '/' . $news->slug;
         $mailData = [
             'news' => $news,

@@ -104,31 +104,10 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      {{-- <li class="nav-item d-none d-sm-inline-block">
-      <a href="{{url('/dashboard')}}" class="nav-link">Home</a>
-      </li> --}}
     </ul>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <!-- Navbar Search -->
-    {{--  <li class="nav-item">
-        <div class="navbar-search-block">
-          <form class="form-inline">
-            <div class="input-group input-group-sm">
-              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-              <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit">
-                  <i class="fas fa-search"></i>
-                </button>
-                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </li> --}}
 
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{url('/dashboard')}}" class="nav-link"><i class="fas fa-user"></i> {{Auth::user()->name}}</a>
@@ -229,14 +208,14 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <a href="{{route('advertisements.index')}}" class="nav-link">
               <i class="nav-icon fas fa-ad"></i>
               <p>
                 Advertisements
               </p>
             </a>
-          </li>
+          </li> --}}
 
            <li class="nav-item">
             <a href="{{route('subscriber.index')}}" class="nav-link">
@@ -265,29 +244,35 @@
             </a>
           </li>
 
-          {{-- <li class="nav-item">
+          <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon far fa-envelope"></i>
+              <i class="nav-icon fas fa-ad"></i>
               <p>
-                Mailbox
+                Advertisement
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview ml-4">
               <li class="nav-item">
-                <a href="pages/mailbox/mailbox.html" class="nav-link">
+                <a href="{{route('headerindex')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Inbox</p>
+                  <p>Header</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/mailbox/compose.html" class="nav-link">
+                <a href="{{route('sidebarindex')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Compose</p>
+                  <p>Sidebar</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('bottomindex')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Bottom</p>
                 </a>
               </li>
             </ul>
-          </li> --}}
+          </li>
           {{-- <li class="nav-header">MISCELLANEOUS</li>
           <li class="nav-item">
             <a href="iframe.html" class="nav-link">

@@ -32,9 +32,30 @@
                                     <a href="{{route('index')}}"><img src="{{Storage::disk('uploads')->url($setting->siteLogo)}}" alt="{{$setting->sitename}}" style="max-width: 120px; height:auto"></a>
                                 </div>
                             </div>
+
+                            <div class="col-xl-9 col-lg-9 col-md-9">
+                                <div class="header-banner f-right owl-ad owl-carousel owl-theme">
+                                    @foreach ($header_advertisement as $advertisement)
+                                        <div class="item">
+                                            <a href="{{$advertisement->link}}" target="_blank"><img src="{{Storage::disk('uploads')->url($advertisement->imagename)}}" class="img-fluid" alt="" style="max-height: 150px;"></a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
                             <div class="col-xl-9 col-lg-9 col-md-9">
                                 <div class="header-banner f-right">
                                     <a href="{{$advertisement->homepage_header_url}}" target="_blank"><img src="{{Storage::disk('uploads')->url($advertisement->homepage_header_image)}}" class="img-fluid" alt="" style="max-height: 150px;"></a>
+                                    <section class="hero-section">
+                                        <div class="hero-items owl-carousel">
+                                            @foreach ($header_advertisement as $advertisement)
+                                                <div onclick="location.href={{$advertisement->link}}"
+                                                    style="cursor: pointer; background-repeat: no-repeat; background-size:cover;max-height: 150px;"
+                                                    class="single-hero-items set-bg img-fluid"
+                                                    data-setbg="{{Storage::disk('uploads')->url($advertisement->imagename)}}">
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </section>
                                 </div>
                             </div>
                         </div>

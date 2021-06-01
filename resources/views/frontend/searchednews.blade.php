@@ -21,7 +21,7 @@
                                         <div class="col-md-12 text-center">
                                             <h3>No Results found..</h3>
                                         </div>
-                                            
+
                                         @else
                                             @foreach ($searchednews as $newsitem)
                                                 <div class="col-lg-6 col-md-6 mt-5">
@@ -178,8 +178,12 @@
                     </div>
                 </div> --}}
                 <!-- New Poster -->
-                <div class="news-poster d-none d-lg-block mt-5">
-                   <a href="{{$advertisement->singlepage_sidebar_url}}" target="_blank"><img src="{{Storage::disk('uploads')->url($advertisement->singlepage_sidebar_image)}}" alt=""></a>
+                <div class="news-poster d-lg-block mt-5 owl-ad owl-carousel owl-theme">
+                    @foreach ($sidebar_advertisement as $advertisement)
+                        <div class="item">
+                            <a href="{{$advertisement->link}}" target="_blank"><img src="{{Storage::disk('uploads')->url($advertisement->imagename)}}" alt="" style="max-height: 670px;"></a>
+                        </div>
+                    @endforeach
                 </div>
 
                 <aside class="single_sidebar_widget popular_post_widget">
@@ -207,13 +211,17 @@
      <!-- Whats New End -->
 
      <hr>
-     <div class="container-fluid">
+     <div class="container">
         <div class="row">
-            <div class="col-md-12 text-center">
-                <a href="{{$advertisement->singlepage_bottom_url}}" target="_blank"><img src="{{Storage::disk('uploads')->url($advertisement->singlepage_bottom_image)}}" alt="{{$advertisement->homepage_bottom_url}}" style="max-width: 75%; height: auto;"></a>
+            <div class="col-lg-12 text-center owl-ad owl-carousel owl-theme">
+                @foreach ($bottom_advertisement as $advertisement)
+                    <div class="item">
+                        <a href="{{$advertisement->link}}" target="_blank"><img src="{{Storage::disk('uploads')->url($advertisement->imagename)}}" alt="" class="img-fluid" style="max-height: 550px;"></a>
+                    </div>
+                @endforeach
             </div>
         </div>
-     </div>
+    </div>
 
     <hr>
      </main>

@@ -1,6 +1,6 @@
 (function ($)
   { "use strict"
-  
+
 /* 1. Proloder */
     $(window).on('load', function () {
       $('#preloader-active').delay(450).fadeOut('slow');
@@ -289,8 +289,8 @@
     new WOW().init();
 
 /* 11. Datepicker */
-    
-// 11. ---- Mailchimp js --------//  
+
+// 11. ---- Mailchimp js --------//
     function mailChimp() {
       $('#mc_embed_signup').find('form').ajaxChimp();
     }
@@ -324,3 +324,25 @@ $('.close-icon').click(function(){
 
 
 })(jQuery);
+
+
+$(document).ready(function() {
+
+    $(".owl-ad").owlCarousel({
+        navigation : false, // Show next and prev buttons
+        slideSpeed : 100,
+        pagination:false,
+        //singleItem:true,
+        autoplay:true,
+        loop:true,
+        dots:false,
+
+        // "singleItem:true" is a shortcut for:
+        items : 1,
+        itemsDesktop : true,
+        itemsDesktopSmall : true,
+        itemsTablet: false,
+        itemsMobile : false
+    });
+
+  });

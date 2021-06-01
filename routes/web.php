@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdvertisementController;
+use App\Http\Controllers\AdvertisementsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MultimediaController;
 use App\Http\Controllers\NewsController;
@@ -38,6 +39,30 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('subscriber', SubscriberController::class);
     Route::resource('permission', PermissionController::class);
     Route::resource('roles', RoleController::class);
+
+    // Header Avertisement
+    Route::get('/headerindex', [AdvertisementsController::class, 'headerindex'])->name('headerindex');
+    Route::get('/createheader', [AdvertisementsController::class, 'createheader'])->name('createheader');
+    Route::post('/saveheader', [AdvertisementsController::class, 'saveheader'])->name('saveheader');
+    Route::get('/editheader/{id}', [AdvertisementsController::class, 'editheader'])->name('editheader');
+    Route::put('/updateheader/{id}', [AdvertisementsController::class, 'updateheader'])->name('updateheader');
+    Route::delete('/deleteheader/{id}', [AdvertisementsController::class, 'deleteheader'])->name('deleteheader');
+
+    // Sidebar Avertisement
+    Route::get('/sidebarindex', [AdvertisementsController::class, 'sidebarindex'])->name('sidebarindex');
+    Route::get('/createsidebar', [AdvertisementsController::class, 'createsidebar'])->name('createsidebar');
+    Route::post('/savesidebar', [AdvertisementsController::class, 'savesidebar'])->name('savesidebar');
+    Route::get('/editsidebar/{id}', [AdvertisementsController::class, 'editsidebar'])->name('editsidebar');
+    Route::put('/updatesidebar/{id}', [AdvertisementsController::class, 'updatesidebar'])->name('updatesidebar');
+    Route::delete('/deletesidebar/{id}', [AdvertisementsController::class, 'deletesidebar'])->name('deletesidebar');
+
+    // Bottom Avertisement
+    Route::get('/bottomindex', [AdvertisementsController::class, 'bottomindex'])->name('bottomindex');
+    Route::get('/createbottom', [AdvertisementsController::class, 'createbottom'])->name('createbottom');
+    Route::post('/savebottom', [AdvertisementsController::class, 'savebottom'])->name('savebottom');
+    Route::get('/editbottom/{id}', [AdvertisementsController::class, 'editbottom'])->name('editbottom');
+    Route::put('/updatebottom/{id}', [AdvertisementsController::class, 'updatebottom'])->name('updatebottom');
+    Route::delete('/deletebottom/{id}', [AdvertisementsController::class, 'deletebottom'])->name('deletebottom');
 });
 
 
